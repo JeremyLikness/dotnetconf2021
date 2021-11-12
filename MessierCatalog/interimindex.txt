@@ -1,0 +1,35 @@
+       const mainDiv = document.getElementById("main");
+        const show = function (resp) {
+            list = resp.data.targets;
+            mainDiv.innerHTML = "";
+            for (var idx = 0; idx < list.length; idx++) {
+                const target = list[idx];
+                const newDiv = document.createElement("div");
+                newDiv.classList.add("card");
+                newDiv.innerHTML = `<b>M${target.index}</b><br/>` +
+                    `<img src="${target.thumbnail}"/><br/>` +
+                    `<p>${target.nGCDesignation}</p>`;
+                mainDiv.appendChild(newDiv);
+            }          
+        };
+        setTimeout(function () {
+            fetch("https://localhost:{port}/graphql", {
+                method: "POST",
+                body: JSON.stringify({
+                    query: `{
+                        targets {
+                                id
+				thumbnail
+                                index
+                                nGCDesignation }
+                    }`}),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(function (result) {
+                    result.json().then(function (json) {
+                        show(json);
+                    })
+                });
+        }, 0);        

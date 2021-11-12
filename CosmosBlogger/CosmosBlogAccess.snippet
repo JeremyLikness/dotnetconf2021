@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Blog Access</Title>
+		</Header>
+		<Snippet>
+			<Code Language="CSharp">
+				<![CDATA[
+public class CosmosBlogAccess : IBlogAccess
+{
+    private readonly IDbContextFactory<BlogContext> context;
+    public CosmosBlogAccess(IDbContextFactory<BlogContext> context) => this.context = context;
+
+    public async Task<Blog> GetBlogAsync(Guid blogId)
+    {
+        using var ctx = context.CreateDbContext();
+        return await ctx.Blogs
+		.Where(b => b.Id == blogId)            
+		.Select(b => new Blog
+            {
+                Id = blogId,
+                Description = b.Description,
+                Image = b.Image,
+                Link = b.Link,
+                Title = b.Title,
+            })            
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<Blog>> GetBlogsAsync()
+    {
+        using var ctx = context.CreateDbContext();
+        return await ctx.Blogs
+            .OrderBy(b => b.Title)
+            .Select(b => new Blog
+            {
+                Id = b.Id,
+                Description = b.Description,
+                Image = b.Image,
+                Link = b.Link,
+                Title = b.Title,
+            })
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Post>> GetFilteredPostsForBlogAsync(Guid blogId, string filter)
+    {
+        using var ctx = context.CreateDbContext();
+        return (
+            await ctx.Blogs
+                .FromSqlRaw(@"
+    SELECT c.Id, c.id, c.Discriminator, ARRAY(
+    SELECT value p from p in c.Posts 
+    WHERE c.Id = {0} AND EXISTS (
+        SELECT 1 from p where contains(p.Title, {1}) or contains(p.Description, {1})) ) as Posts
+    FROM c", blogId, filter)
+        .ToListAsync())
+        .SelectMany(b => b.Posts)
+        .Select(p => PostClone(p))
+        .OrderBy(p => p.Title)
+        .ToList();
+    }
+
+    private static Post PostClone(Post p) => new()
+    {
+        Id = p.Id,
+        Blog = new Blog { Id = p.Blog.Id },
+        Description = p.Description,
+        PermaLink = p.PermaLink,
+        Title = p.Title
+    };
+}
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

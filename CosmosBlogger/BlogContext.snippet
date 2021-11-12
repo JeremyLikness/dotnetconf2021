@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Blog Context</Title>
+		</Header>
+		<Snippet>
+			<Code Language="CSharp">
+				<![CDATA[
+public class BlogContext : DbContext
+{
+    public BlogContext() 
+    {
+    }
+
+    public BlogContext(DbContextOptions<BlogContext> opts) : base(opts)
+    {
+    }
+
+    public DbSet<Blog> Blogs { get; set; } = null!;
+}
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

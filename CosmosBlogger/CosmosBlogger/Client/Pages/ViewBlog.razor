@@ -1,0 +1,118 @@
+﻿@page "/Blog/{id}"
+@using CosmosBlogger.Shared
+@inject IBlogAccess Client
+
+@if (loading)
+{
+    <div class="alert alert-info">Loading...</div>
+}
+else
+{
+    if (blog == null)
+    {
+        <div class="alert alert-danger">Blog not found.</div>
+    }
+    else
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <img src="@blog.Image" />
+                <h1>@blog.Title</h1>
+                <p>@blog.Description</p>
+                <p>
+                    Enter filter text: <input placeholder="Type filter here" @bind-value="@filter"
+                                      @bind-value:event="oninput" autofocus />
+                </p>
+                <p>
+                    <button class="btn btn-success" disabled=@btnDisabled @onclick="@DoSearchAsync">Search</button>
+                </p>
+            </div>
+            @if (notFound)
+            {
+                <div class="row alert alert-warning">No items matched the filter.</div>
+            }
+            else if (posts.Count > 0)
+            {
+                <div class="row">
+                    @foreach (var post in posts)
+                    {
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h2 class="card-title">@post.Title</h2>
+                                <p class="card-text">@TruncateDescription(post.Description)</p>
+                                <a target="_blank" class="btn btn-success" href="@post.PermaLink">Read the Post</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+}
+
+@code {
+    string filter = string.Empty;
+    string error = string.Empty;
+    bool notFound = false;
+    bool btnDisabled => loading || string.IsNullOrWhiteSpace(filter) || filter.Length < 3;
+    private bool loading = false;
+    private Guid blogId;
+    private Blog blog;
+    private List<Post> posts = new List<Post>();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (Guid.TryParse(Id, out blogId))
+        {
+            loading = true;
+            notFound = false;
+            error = string.Empty;
+            blog = null;
+            try
+            {
+                blog = await Client.GetBlogAsync(blogId);
+            }
+            catch (Exception ex)
+            {
+                error = $"Oops! {ex.Message}";
+            }
+            finally
+            {
+                loading = false;
+            }
+        }
+        await base.OnParametersSetAsync();
+    }
+
+    public async Task DoSearchAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(filter) && !loading && filter.Length >= 3)
+        {
+            posts.Clear();
+            loading = true;
+            notFound = false;
+            error = string.Empty;
+            try
+            {
+                posts = (await Client.GetFilteredPostsForBlogAsync(blogId, filter)).ToList();
+                notFound = posts.Count < 1;
+            }
+            catch (Exception ex)
+            {
+                error = $"Oops! {ex.Message}";
+            }
+            finally
+            {
+                loading = false;
+            }
+
+            filter = string.Empty;            
+        }
+    }
+    
+    private string TruncateDescription(string description) => description.Length > 250 ?
+        $"{description.Substring(0, description.IndexOf(' ', 250))}..." : description;
+}

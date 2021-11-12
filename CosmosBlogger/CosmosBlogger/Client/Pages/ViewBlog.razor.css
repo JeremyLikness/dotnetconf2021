@@ -1,0 +1,18 @@
+﻿img {
+    float: left; 
+    max-height: 33vh; 
+    width: auto; 
+    margin: 1em;
+}
+
+.card {
+    width: 300px;
+    margin: 1em;
+    float: left;
+    border-right: solid 2px darkgray;
+    border-bottom: solid 2px darkgray;
+}
+
+.card:hover {
+    border: solid 2px purple;
+}

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">	
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Configuration</Title>
+		</Header>
+		<Snippet>
+			<Code Language="CSharp">
+				<![CDATA[
+var (endpoint, key) = SomeCompletelySecureLocation.Keys;
+builder.Services.AddDbContextFactory<BlogContext>(
+    opt => opt.UseCosmos(endpoint, key, nameof(BlogContext.Blogs)));
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+
+</CodeSnippets>

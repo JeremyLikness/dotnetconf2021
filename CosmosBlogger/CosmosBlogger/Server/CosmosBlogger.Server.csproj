@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.0-rc*" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="6.0.0-rc*"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client\CosmosBlogger.Client.csproj" />
+    <ProjectReference Include="..\Shared\CosmosBlogger.Shared.csproj" />
+  </ItemGroup>
+
+
+</Project>

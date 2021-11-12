@@ -1,0 +1,65 @@
+﻿@page "/"
+@using CosmosBlogger.Shared
+@inject IBlogAccess Client
+<PageTitle>The Cosmos Blogger</PageTitle>
+
+<h1>The Cosmos Blogger</h1>
+
+@if (loading)
+{
+    <div class="alert alert-info">Loading...</div>
+}
+else
+{
+    if (string.IsNullOrWhiteSpace(error))
+    {
+        if (blogs.Count > 0)
+        {
+            <div class="container-fluid">                
+            @foreach(var blog in blogs)
+            {
+                <div class="card bg-light">
+                    <img class="card-img-top" src="@blog.Image" alt="@blog.Description"/>
+                    <div class="card-body">
+                        <h2 class="card-title">@blog.Title</h2>
+                        <p class="card-text">@blog.Description</p>
+                        <a href="/Blog/@blog.Id" class="btn btn-primary">Search blog</a>
+                    </div>
+                </div>                
+            }                
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">No blogs were found.</div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-danger">@error</div>
+    }
+}
+
+@code {
+    bool loading = false;
+    string error = string.Empty;
+    List<Blog> blogs = new List<Blog>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        loading = true;
+        try
+        {
+            error = string.Empty;
+            blogs = (await Client.GetBlogsAsync()).ToList();            
+        }
+        catch(Exception ex)
+        {
+            error = $"Oops! {ex.Message}";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

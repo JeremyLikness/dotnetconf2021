@@ -1,0 +1,59 @@
+﻿<html>
+<head>
+    <title>Messier Catalog</title>
+   <style type="text/css">
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        h1 {
+            padding: 0.1em;
+            border-top: solid lightgray 1px;
+            border-bottom: solid lightgray 1px;
+        }
+        div .main {
+            margin: 1em;
+        }
+        div .card {
+            background: lightgray;
+            border: solid darkgray 1px;
+            width: 270px;
+            height: 280px;
+            float: left;
+            padding: 0.5em;
+            margin-left: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        div .card:hover {
+            background: white;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Messier Catalog</h1>
+    <div id="main">Loading...</div>
+    <script>
+        const mainDiv = document.getElementById("main");
+        const show = function (list) {
+            mainDiv.innerHTML = "";
+            for (var idx = 0; idx < list.length; idx++) {
+                const target = list[idx];
+                const newDiv = document.createElement("div");
+                newDiv.classList.add("card");
+                newDiv.innerHTML = `<b>M${target.index}</b><br/>` +
+                    `<img src="${target.thumbnail}"/><br/>` +
+                    `<p>${target.ngcDesignation}</p>`;
+                mainDiv.appendChild(newDiv);
+            }
+        };
+        setTimeout(function () {
+            fetch("https://localhost:{port}/messier")
+                .then(function (result) {
+                    result.json().then(function (json) {
+                        show(json);
+                    })
+                });
+        }, 0);        
+    </script>
+</body>
+</html>
