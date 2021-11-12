@@ -2,6 +2,10 @@
 
 This demo was part of the main .NET Conf presentation for what's new with EF Core 6.
 
+📽️ [Deck: What's New in EF Core 6](../Presentations/dotnetconf2021-efcore6-whatsnew.pptx)
+
+🎞️ [Video: What's New in EF Core 6](https://www.youtube.com/watch?v=_1fJeW4F3ts)
+
 ## Loading the blog
 
 To get started, you should have an instance of an Azure Cosmos DB account. You may also use the emulator. Create a new .NET 6 console app and paste the following code into the `Program.cs`. Change the blog feeds to any RSS feeds you would like, and update the endpoint and key. Run the program to populate the database.
@@ -204,6 +208,6 @@ builder.Services.AddDbContextFactory<BlogContext>(
     opt => opt.UseCosmos(endpoint, key, nameof(BlogContext.Blogs)));
 ```
 
-^ __Note__: The `SomeCompletelySecureLocation` class contains the endpoint and keys for the Cosmos DB emulator. If you are using a "live" version, change the code to securely retrieve the keys from configuration or environment.
+> __Note__: The `SomeCompletelySecureLocation` class contains the endpoint and keys for the Cosmos DB emulator. If you are using a "live" version, change the code to securely retrieve the keys from configuration or environment.
 
 Finally, swap the service configuration for `MockBlogAccess` to `CosmosBlogAccess.`
