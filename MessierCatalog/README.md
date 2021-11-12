@@ -2,7 +2,7 @@
 
 This demo is intended to show both how well HotChocolate integrates with EF Core, but also how easy it is to use GraphQL to stand up a rich API. The following steps can be used to walk through the demo.
 
-📽️ [Presentation deck](..\Presentations\dotnetconf2021-efcore6-graphql.pptx)
+📽️ [Presentation deck](../Presentations/dotnetconf2021-efcore6-graphql.pptx)
 
 🎞️ Video - TBD
 
