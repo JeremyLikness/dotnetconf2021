@@ -6,6 +6,7 @@ This repo contains the source code and presentations related to what's new in EF
 - [Deck: What's New in EF Core 6](./Presentations/dotnetconf2021-efcore6-whatsnew.pptx)
 - [Video: What's New in EF Core 6](https://www.youtube.com/watch?v=_1fJeW4F3ts)
 - [Demo: GraphQL with EF Core 6, Messier Catalog Edition](./MessierCatalog/README.md)
-- [Deck: GraphQL with EF Core 6](./Presentations/dotnetconf2021-efcore6-graphql.pptx)
+- [Video: GraphQL with EF Core 6, Messier Catalog Edition](https://youtu.be/GBvTRcV4PVA)
+- [Deck: GraphQL with EF Core 6, Messier Catalog Edition](./Presentations/dotnetconf2021-efcore6-graphql.pptx)
 - [Demo: GraphQL with EF Core 6, Recipe Edition](./GraphQLApp/README.md)
 - [Video: GraphQL with EF Core 6, Recipe Edition](https://youtu.be/4nqjB_z5CU0)
